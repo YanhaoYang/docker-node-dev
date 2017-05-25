@@ -1,4 +1,4 @@
-export ZSH=/home/docker/.oh-my-zsh
+export ZSH=/home/node/.oh-my-zsh
 
 ZSH_THEME="fishy"
 

@@ -1,4 +1,4 @@
-FROM node:7.9.0
+FROM node:7.10.0
 MAINTAINER Yanhao Yang <yanhao.yang@gmail.com>
 
 # Development tools
@@ -22,12 +22,10 @@ RUN \
   chsh --shell /bin/zsh && \
   echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
   locale-gen && \
-  groupadd --gid 1000 docker && \
-  useradd --gid 1000 --uid 1000 --create-home docker && \
-  echo "docker ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/user && \
+  echo "node ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/user && \
   chmod 0440 /etc/sudoers.d/user && \
-  chown -R docker:docker /var/lib/nginx && \
-  chown -R docker:docker /var/log/nginx && \
+  chown -R node:node /var/lib/nginx && \
+  chown -R node:node /var/log/nginx && \
   chmod +x /usr/local/bin/dumb-init && \
   # build vim
   cd /tmp && \
@@ -52,19 +50,19 @@ ENV TERM=xterm-256color
 # To make oh-my-zsh installer happy
 ENV SHELL=/usr/bin/zsh
 
-USER docker
+USER node
 
 RUN \
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && \
    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && \
    git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
-  git clone https://github.com/YanhaoYang/vim-for-python.git ~/.vim && \
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
+  git clone https://github.com/YanhaoYang/vim-for-node.git ~/.vim && \
   cd ~ && ln -s .vim/vimrc .vimrc && vim +BundleInstall +qa &&\
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
   ~/.fzf/install --all
 
-COPY files/.zshrc /home/docker/.zshrc
+COPY files/.zshrc /home/node/.zshrc
 
+EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["nginx", "-g", "daemon off;", "-c", "/etc/nginx/nginx.conf"]

@@ -1,18 +1,19 @@
 version: '2'
 
 services:
-  golang-dev:
-    container_name: golang-dev
+  node-dev:
+    container_name: node-dev
     build:
       context: .
       dockerfile: Dockerfile
-    image: yanhao/docker-golang-dev
-    hostname: golang.dev
+    image: yanhao/docker-node-dev
+    hostname: node.dev
     ports:
       - "8000:8000"
     volumes:
-      - ./src:/go/src
+      - ./src:/src
       - $SSH_AUTH_SOCK:/ssh-agent
       - "${HOME}/.vbuf:/home/docker/.vbuf"
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
+    working_dir: /src
