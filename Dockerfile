@@ -1,10 +1,11 @@
-FROM node:7.10.0
+FROM node:8.0.0
 MAINTAINER Yanhao Yang <yanhao.yang@gmail.com>
 
 # Development tools
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  build-essential cmake python-dev python3-dev \
   # for build vim
   libncurses5-dev libncursesw5-dev \
   ruby-dev lua5.1 liblua5.1-dev \
@@ -27,6 +28,7 @@ RUN \
   chown -R node:node /var/lib/nginx && \
   chown -R node:node /var/log/nginx && \
   chmod +x /usr/local/bin/dumb-init && \
+  npm install -g typescript && \
   # build vim
   cd /tmp && \
   git clone https://github.com/vim/vim.git && \
@@ -58,6 +60,8 @@ RUN \
    git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
   git clone https://github.com/YanhaoYang/vim-for-node.git ~/.vim && \
   cd ~ && ln -s .vim/vimrc .vimrc && vim +BundleInstall +qa &&\
+  cd ~/.vim/bundle/YouCompleteMe && \
+  ./install.py && \
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
   ~/.fzf/install --all
 
