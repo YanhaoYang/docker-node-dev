@@ -1,4 +1,4 @@
-FROM node:7.9.0
+FROM node:9.0.0
 MAINTAINER Yanhao Yang <yanhao.yang@gmail.com>
 
 # Development tools
